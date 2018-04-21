@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MemoryBookService {
+public class MemoryBookService implements BookService {
 
 	List<Book> booksList;
 
@@ -19,6 +19,7 @@ public class MemoryBookService {
 				"programming"));
 	}
 
+	
 	public List<Book> getAllBooks() {
 
 		return booksList;
@@ -41,31 +42,36 @@ public class MemoryBookService {
 
 	public void editBook(Book book, Long id) {
 
-		for (Book bookToCheck : booksList) {
-
-			if (bookToCheck.getId().equals(id)) {
-
-				booksList.remove(bookToCheck);
-				booksList.add(book);
-
-			}
-
-		}
+		Book bookToedit = getBookById(id);
+		
+		bookToedit.setAuthor(book.getAuthor());
+		bookToedit.setIsbn(book.getIsbn());
+		bookToedit.setPublisher(book.getPublisher());
+		bookToedit.setTitle(book.getTitle());
+		bookToedit.setType(book.getType());
+		
 
 	}
+	
+	
+	public void addtBook(Book book , Long id) {
 
-	public void deleteBook(Long id) {
+		
+		book.setId(id);
+		
+		booksList.add(book);
 
-		for (Book bookToCheck : booksList) {
+	}
+	
+	
 
-			if (bookToCheck.getId().equals(id)) {
+	public Book deleteBook(Long id) {
 
-				booksList.remove(bookToCheck);
+		booksList.remove(getBookById(id));
 
-			}
-
-		}
-
+		
+		
+		return getBookById(id);
 	}
 
 }
