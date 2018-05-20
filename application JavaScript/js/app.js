@@ -9,32 +9,10 @@ $(function() {
 	var counter=0;
 	
 
-	button.on('click', function(e){
+	button.on('click', function(event){
 
-		e.preventDefault();
-		$.ajax({
-
-
-			url: "http://localhost:8081/booksRest/books",
-			dataType : "json",
-			success: function( data ) {
-
-
-
-				for(var i=0; i < data.length; i++)
-				{
-
-
-					$('#table').append('<tr><td>'+data[i].title+'</td><td><input id="'+data[i].id+'"" class="moreInfo" type="submit" value="Get more info"></td></tr>');
-
-
-				}
-
-				test = $('#table').find('.moreInfo');
-			}
-
-
-		});
+		event.preventDefault();
+		bookTable ();
 
 		button.off();
 
@@ -46,7 +24,7 @@ $(function() {
 		event.preventDefault();
 		$.ajax({
 
-			url: 'http://localhost:8081/booksRest/books/'+$(this).attr('id'),
+			url: 'http://localhost:8080/books/'+$(this).attr('id'),
 			dataType: 'json',
 			success: function(data){
 
@@ -59,6 +37,34 @@ $(function() {
 
 		});
 	});
+
+
+
+		$('#table').on('click', '.deleteBook', function(event){
+
+		event.preventDefault();
+		$.ajax({
+
+			url: 'http://localhost:8080/books/'+$(this).attr('id'),
+			dataType: 'json',
+			type: 'delete',
+			success: function(data){
+
+				
+
+				
+			},
+			complete: function(data){ 
+				
+
+				$("#table tr").remove(); 
+				bookTable ();
+			}
+
+		});
+	});
+
+
 
 
 
@@ -88,21 +94,26 @@ $( "#form" ).submit(function( event ) {
         	'Content-Type': 'application/json' 
     		},
 
-			url: 'http://localhost:8081/booksRest/books',
+			url: 'http://localhost:8080/books',
 			type: 'POST',
 			dataType: 'json',
-			
+
 			data:JSON.stringify(order) ,
 			
 			success: function(){
 
-				console.log('succes');
+				
 				
 			},
-			error: function(){ 
+			error: function(data){ 
+				
+				document.getElementById("form").reset(); 
 
-				console.log('fail');
-
+			},
+			complete: function(data){ 
+				
+				$("#table tr").remove(); 
+				bookTable ();
 			}
 
 		});
@@ -118,6 +129,33 @@ $( "#form" ).submit(function( event ) {
 		$('#table').append('<tr><td>'+id+'</td><td>'+author+'</td><td>'+isbn+'</td><td>'+publisher+'</td><td>'+title+'</td><td>'+type+'</td></tr>')
 	};
 
+
+	function bookTable () {
+
+				$.ajax({
+
+
+			url: "http://localhost:8080/books",
+			dataType : "json",
+			success: function( data ) {
+
+
+
+				for(var i=0; i < data.length; i++)
+				{
+
+
+					$('#table').append('<tr><td>'+data[i].title+'</td><td><input id="'+data[i].id+'"" class="moreInfo" type="submit" value="Get more info"></td><td><input id="'+data[i].id+'"" class="deleteBook" type="submit" value="Delete Book"></td></tr>');
+
+
+				}
+
+				test = $('#table').find('.moreInfo');
+			}
+
+
+		});
+	};
 
 
 
