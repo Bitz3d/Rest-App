@@ -31,3 +31,12 @@ hs_err_pid*
 *.iml
 out
 gen
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
