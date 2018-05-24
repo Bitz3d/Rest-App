@@ -1,8 +1,10 @@
 # Rest-App
 
-REST application 
+REST bookstore management application 
 
-Backend - Java<br />
+
+## TECHNOLOGY
+Backend - Java
 <li> Spring MVC </li>
-
+<br />
 Frontend - JavaSrcript
